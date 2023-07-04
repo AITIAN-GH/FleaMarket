@@ -1,4 +1,4 @@
-# 一个前后端分离的跳蚤市场管理系统系统
+# 一个前后端分离的跳蚤市场管理系统
 使用技术：SpringBoot + Vuejs + Redis + ElementPlus + Axios  + Pinia + MybatisPlus + MySQL
 ## 环境准备
 > JDK1.8 === Nodejs18.12.1 === Maven3.9.2 === Redis-Win === MySQL
