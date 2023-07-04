@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.UserNewsMapper">
+
+    <insert id="addUserNews" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user_news values (null, #{userId}, #{commentId}, 0)
+    </insert>
+
+    <update id="userReceiveNews">
+        UPDATE sys_user_news SET received = 1 WHERE id = #{id}
+    </update>
+
+    <select id="getUserNewsByUserId" resultType="com.xu.system.vo.UserNews">
+        SELECT sun.id, sc.product_id,sp.classimg as pro_img, sc.id as comment_id,sc.content, sc.`time`, sun.received, su2.name as from_name, sc2.content as my_content, su.name as my_name
+        FROM sys_comment sc
+        JOIN sys_user_news sun ON sun.comment_id = sc.id
+        JOIN sys_product sp ON sc.product_id = sp.id
+        JOIN sys_user su ON sun.user_id = su.id
+        JOIN sys_user su2 ON sc.user_id = su2.id
+        LEFT JOIN sys_comment sc2 ON sc2.id = sc.pid
+        WHERE sun.user_id = #{userId} AND sun.received = 0
+        ORDER BY sun.id DESC
+    </select>
+
+    <select id="getSocketNewDataByPid" resultType="com.xu.system.dto.UserNewDTO">
+        SELECT sp.classimg as pro_img, su.id as user_id, su.`name` as my_name, (SELECT `name` FROM sys_user WHERE id = #{userId}) as from_name, sc.content as my_content
+        FROM sys_comment sc JOIN sys_product sp ON sc.product_id = sp.id JOIN sys_user su ON sc.user_id = su.id AND sc.id = #{pid}
+    </select>
+
+    <select id="getSocketNewDataByProductId" resultType="com.xu.system.dto.UserNewDTO">
+        SELECT su.id as user_id, su.`name` as my_name, sp.classimg as pro_img,
+        (SELECT `name` FROM sys_user WHERE id = #{userId}) as from_name
+        FROM sys_product sp JOIN sys_user_product sup
+        on sup.product_id = sp.id JOIN sys_user su
+        on sup.user_id = su.id AND sp.id = #{productId}
+    </select>
+
+</mapper>

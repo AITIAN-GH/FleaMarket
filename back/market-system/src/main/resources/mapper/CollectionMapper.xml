@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.CollectionMapper">
+    <select id="getCollectionsByUserId" resultType="com.xu.system.vo.CollectionVo">
+        SELECT sp.id,sp.product_name,sp.product_author,sp.classimg as classImg
+        FROM sys_product sp JOIN sys_collection sc JOIN sys_user su
+        WHERE sc.product_id = sp.id AND sc.user_id = su.id
+        AND su.id = #{userId}
+    </select>
+    <select id="checkProductInCart" resultType="java.lang.String">
+        SELECT distinct sp.product_name
+        FROM sys_collection sct JOIN sys_product sp JOIN sys_user su
+        WHERE sct.user_id = su.id AND sct.product_id = sp.id
+        AND sct.user_id = #{userId} ANd sct.product_id = #{productId}
+    </select>
+</mapper>
