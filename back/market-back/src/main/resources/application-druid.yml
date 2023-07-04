@@ -1,0 +1,65 @@
+# 数据源配置
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/数据库名称?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: MySQL连接用户名
+        password: MySQL连接密码
+        druid:
+            # 初始连接数
+            initialSize: 5
+            # 最小连接池数量
+            minIdle: 10
+            # 最大连接池数量
+            maxActive: 20
+            # 配置获取连接等待超时的时间
+            maxWait: 60000
+            # 配置连接超时时间
+            connectTimeout: 30000
+            # 配置网络超时时间
+            socketTimeout: 60000
+            # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+            timeBetweenEvictionRunsMillis: 60000
+            # 配置一个连接在池中最小生存的时间，单位是毫秒
+            minEvictableIdleTimeMillis: 300000
+            # 配置一个连接在池中最大生存的时间，单位是毫秒
+            maxEvictableIdleTimeMillis: 900000
+            # 配置检测连接是否有效
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            webStatFilter:
+                enabled: true
+                url-pattern: "/*"
+                #排除一些静态资源，以提高效率
+                exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+            # 配置DruidStatViewServlet
+            statViewServlet:
+                # 设置可以访问控制台
+                enabled: true
+                url-pattern: "/druid/*"
+                # IP白名单(没有配置或者为空，则允许所有访问)
+                # allow: 127.0.0.1,192.168.46.120
+                # IP黑名单 (存在共同时，deny优先于allow)
+                # deny: 192.168.46.121
+                #  禁用HTML页面上的“Reset All”功能
+                reset-enable: false
+                # 控制台管理用户名和密码
+                login-username: admin
+                login-password: admin
+            # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+            # DruidFilterConfiguration
+            filter:
+                slf4j:
+                    enabled: true
+                stat:
+                    enabled: true
+                    # 慢SQL记录
+                    log-slow-sql: true
+                    slow-sql-millis: 500
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
