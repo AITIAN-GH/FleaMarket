@@ -55,4 +55,31 @@
         </dependency>
     </dependencies>
 
+    <!-- 项目打包 注意事项   -->
+    <!--
+        1. 将common、system模块 install
+		2. 配置 mainClass 对应参数
+		3. 进行打包
+	-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.10</version>
+                <configuration> <!-- 自己的启动类地址 -->
+                    <mainClass>com.xu.admin.MarketBackApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
