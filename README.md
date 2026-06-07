@@ -21,10 +21,11 @@
 ## 启动流程
 
 > 在 `front/marketproject` 和 `front/marketback` 目录下分别执行 `npm install`
+
 > 在 `back` 目录下执行 `mvn clean install`
 
 > 启动 Redis 后，运行 `back/market-back` 中的 `MarketBackApplication.java`
->
+
 > 执行 `front/start.bat` 启动两个前端，或分别执行 `npm run dev`
 
 ## 访问地址
