@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.ProductMapper">
+
+    <insert id="addNewProductToUser">
+        insert into sys_user_product (user_id,product_id) values (#{userId},#{productId})
+    </insert>
+
+    <delete id="removeUserProduct">
+        DELETE FROM sys_user_product WHERE user_id = #{userId}
+        AND product_id IN
+        <foreach collection="ids" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+
+    <select id="getProductsById" resultType="com.xu.system.vo.ProductVo">
+        SELECT sup.id, sp.product_name, sp.id pro_id,sp.stock,product_author, classimg, pro_price, del_price, sc.classify
+        FROM sys_product sp JOIN sys_user su JOIN sys_user_product sup JOIN sys_classify sc
+        ON sup.product_id = sp.id AND sup.user_id = su.id AND sp.classid = sc.bid WHERE su.id = #{uid}
+    </select>
+
+    <select id="getProductsByIdAndName" resultType="com.xu.system.vo.ProductVo">
+        SELECT sup.id,sp.product_name,sp.id pro_id,sp.stock,product_author,classimg,pro_price,del_price,sc.classify
+        FROM sys_product sp JOIN sys_user su JOIN sys_user_product sup JOIN sys_classify sc
+        ON sup.product_id = sp.id AND sup.user_id = su.id AND sp.classid = sc.bid
+        <where>
+            <if test="userId != 0">
+                su.id = #{userId}
+            </if>
+            <if test="proName != null and proName != ''">
+                AND sp.product_name LIKE CONCAT('%',#{proName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getProductsByAdmin" resultType="com.xu.system.vo.ProductVo">
+        SELECT sup.id,sp.product_name,sp.id pro_id,sp.stock, product_author,classimg,pro_price,del_price,sc.classify
+        FROM sys_product sp JOIN sys_user su JOIN sys_user_product sup JOIN sys_classify sc
+        ON sup.product_id = sp.id AND sup.user_id = su.id AND sp.classid = sc.bid
+        ORDER BY sup.id ASC
+    </select>
+
+    <select id="getProductsByAdminAndName" resultType="com.xu.system.vo.ProductVo">
+        SELECT sup.id,sp.id pro_id,sp.product_name,sp.stock,product_author,classimg,pro_price,del_price,sc.classify
+        FROM sys_product sp JOIN sys_user su JOIN sys_user_product sup JOIN sys_classify sc
+        ON sup.product_id = sp.id AND sup.user_id = su.id AND sp.classid = sc.bid WHERE sp.product_name LIKE CONCAT('%',#{proName},'%') ORDER BY sup.id ASC
+    </select>
+
+    <select id="getProIdByUpId" resultType="java.lang.Integer">
+        select sup.product_id from sys_user_product sup
+        where sup.id = #{upId}
+    </select>
+    <select id="getChartData" resultType="com.xu.system.vo.ChartDataVo">
+        SELECT sc.classify as classname, count(sp.id) as classcount FROM sys_product sp JOIN sys_classify sc
+        ON sp.classid = sc.bid GROUP BY sc.classify LIMIT 10000
+    </select>
+    <select id="getChartPersonData" resultType="com.xu.system.vo.ChartDataVo">
+        SELECT su.role as classname, count(su.id) as classcount FROM sys_user su
+        GROUP BY su.role LIMIT 10000
+    </select>
+
+</mapper>

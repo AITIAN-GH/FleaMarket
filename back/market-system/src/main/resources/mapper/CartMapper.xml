@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.CartMapper">
+
+    <insert id="addProductToCart">
+        insert into sys_cart (user_id, product_id)  values(#{userId}, #{productId})
+    </insert>
+
+    <update id="upUserCart">
+        update sys_cart set `count` = #{count} where `cart_id` = #{cartId}
+    </update>
+
+    <select id="productInCart" resultType="java.lang.String">
+        SELECT distinct sp.product_name
+        FROM sys_cart sct JOIN sys_product sp JOIN sys_user su
+        WHERE sct.user_id = su.id AND sct.product_id = sp.id
+        AND sct.user_id = #{userId} ANd sct.product_id = #{productId}
+    </select>
+
+    <select id="getUserCart" resultType="com.xu.system.vo.CartVo">
+        SELECT sct.`cart_id`,sp.`product_name`,sp.`classimg`,sp.`del_price`,sct.`count`, sp.`stock`
+        FROM sys_cart sct JOIN sys_product sp JOIN sys_user su
+        WHERE sct.user_id = su.id AND sct.product_id = sp.id
+        AND sct.user_id = #{userId}
+    </select>
+
+    <select id="getStockByCartId" resultType="java.lang.Integer">
+        SELECT sp.stock FROM sys_product sp
+        WHERE sp.id = (SELECT sc.product_id FROM sys_cart sc WHERE sc.cart_id = #{cartId})
+    </select>
+
+</mapper>

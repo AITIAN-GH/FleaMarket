@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.OrderMapper">
+
+    <insert id="addOrder">
+        INSERT INTO `sys_order` ( order_code, user_id, product_id, bycount ) VALUES ( #{orderCode}, #{userId}, #{productId}, #{bycount})
+    </insert>
+
+    <delete id="cancelOrderByCode" >
+        delete from sys_order where order_code = ${orderCode}
+    </delete>
+
+    <select id="selectOrderByOrderCode" resultType="com.xu.system.pojo.Order">
+        select * from sys_order where order_code = #{orderCode}
+    </select>
+
+    <select id="getOrderList" resultType="com.xu.system.vo.OrderVo">
+        SELECT `order_id`, `order_code`, `product_name`, classimg, del_price, bycount
+        FROM `sys_order` so JOIN `sys_product` sp
+        WHERE so.product_id = sp.id
+        AND so.user_id = #{userId} AND so.`deleted` = 0
+    </select>
+
+    <select id="selectAll" resultType="com.xu.system.pojo.Order">
+        SELECT  * FROM `sys_order` WHERE order_code = #{outTradeNo} AND deleted = 0
+    </select>
+
+    <select id="getPayedOrderList" resultType="com.xu.system.vo.OrderVo">
+        SELECT Distinct `order_id`, `order_code`, `product_name`, classimg, del_price, bycount
+        FROM `sys_order` so JOIN `sys_product` sp
+        WHERE so.product_id = sp.id
+        AND so.user_id = #{userId} AND so.deleted = 1
+    </select>
+
+</mapper>

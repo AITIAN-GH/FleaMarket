@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.system.mapper.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="CommentResultMap" type="com.xu.system.pojo.Comment">
+        <id column="id" property="id" />
+        <result column="content" property="content" />
+        <result column="time" property="time" />
+        <result column="user_id" property="userId" />
+        <result column="product_id" property="productId" />
+        <result column="pid" property="pid" />
+    </resultMap>
+
+    <select id="getAllCommentByProductId" resultType="com.xu.system.vo.CommentVo">
+        SELECT sc.id, sc.content, sc.time, su.name as from_name, sc.pid,
+        (SELECT sur.name FROM sys_comment scm JOIN sys_user sur WHERE scm.user_id = sur.id AND scm.id = sc.pid ) as to_name
+        FROM sys_comment sc JOIN sys_user su JOIN sys_product sp  WHERE sc.product_id = sp.id AND sc.user_id = su.id
+        AND sc.product_id = #{productId} Order By sc.id DESC
+    </select>
+
+</mapper>

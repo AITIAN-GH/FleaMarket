@@ -1,0 +1,59 @@
+# Node / npm
+node_modules/
+**/node_modules/
+_npm-cache/
+.npm/
+.pnpm-store/
+.yarn/
+
+# Frontend build outputs
+dist/
+**/dist/
+coverage/
+**/coverage/
+.vite/
+*.tsbuildinfo
+
+# Maven / Java build outputs
+target/
+**/target/
+out/
+build/
+*.class
+
+# Package archives
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# JVM
+hs_err_pid*
+
+# Temp files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Database
+*.db
+*.sqlite
